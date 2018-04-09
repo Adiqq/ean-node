@@ -1,11 +1,15 @@
 // @flow
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 type Props = {};
 
 export default class Header extends Component<Props> {
     props: Props;
+
+    getNavStyles = (path) => {
+        return this.props.location.pathname === path ? "is-active" : "";
+    }
 
     render() {
         return (
@@ -24,8 +28,17 @@ export default class Header extends Component<Props> {
                     <nav className="tabs is-boxed is-fullwidth">
                         <div className="container">
                             <ul>
-                                <li className="is-active"><a>Linear Least Squares</a></li>
-                                <li><a>Polynomial Least Squares</a></li>
+                                <li className={this.getNavStyles("/lls")}>
+                                    <Link to="/lls">
+                                        Linear Least Squares
+                                    </Link>
+                                </li>
+
+                                <li className={this.getNavStyles("/pls")}>
+                                    <Link to="/pls">
+                                        Polynomial Least Squares
+                                    </Link>
+                                </li>
                             </ul>
                         </div>
                     </nav>
