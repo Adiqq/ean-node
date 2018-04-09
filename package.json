@@ -192,7 +192,7 @@
     "bulma": "^0.6.2",
     "devtron": "^1.4.0",
     "electron-debug": "^1.5.0",
-    "font-awesome": "^4.7.0",
+    "@fortawesome/fontawesome": "^1.1.5",
     "history": "^4.7.2",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
