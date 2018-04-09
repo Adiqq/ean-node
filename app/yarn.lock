@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-ean-native@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/ean-native/-/ean-native-1.0.2.tgz#6614feb9904b94bf8eb460b4061c0479730e31e9"
+ean-native@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/ean-native/-/ean-native-1.0.3.tgz#1eefe48bbb397f8e30ed0bf04c3a654bb13d1158"
   dependencies:
     nan "^2.10.0"
 
