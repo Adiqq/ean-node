@@ -26,8 +26,8 @@ export default class Home extends Component<Props> {
 
   render() {
     return (
-      <div>
-        <div className="box">
+      <div className="section">
+        <div className="container">
           <h2>Home</h2>
           <Link to="/counter">to Counter</Link>
         </div>
