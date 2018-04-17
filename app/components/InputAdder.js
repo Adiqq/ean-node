@@ -12,6 +12,8 @@ type Props = {
 class InputAdder extends Component<Props> {
     props: Props;
 
+    normalizeNumber = (value) => parseInt(value);
+
     render() {
         const {
             error,
@@ -22,17 +24,19 @@ class InputAdder extends Component<Props> {
         return (
             <form onSubmit={handleSubmit(addRow)}>
                 <Field
-                    name="X"
+                    name="x"
                     component={InputField}
-                    type="text"
+                    type="number"
                     label="X"
+                    normalize={this.normalizeNumber}
                     validate={[required, number, minValue0]}
                 />
                 <Field
-                    name="Y"
+                    name="y"
                     component={InputField}
-                    type="text"
+                    type="number"
                     label="Y"
+                    normalize={this.normalizeNumber}
                     validate={[required, number, minValue0]}
                 />
                 <div className="field">
