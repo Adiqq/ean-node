@@ -58,19 +58,22 @@ class LlsPage extends Component<Props> {
             <div className="section">
                 <div className="container">
                     <InputAdder addRow={this.addRow} />
-                    <InputTable rows={this.state.rows} />
-                    <form onSubmit={handleSubmit(this.onFormSubmit)}>
-                        <div className="field">
-                            <div className="control">
-                                <input
-                                    className="button is-link"
-                                    type="submit"
-                                    value="Oblicz"
-                                    disabled={this.submitting}
-                                />
-                            </div>
+                    <div class="columns">
+                        <div class="column">
+                            Input
+                            <InputTable rows={this.state.rows} />
                         </div>
-                    </form>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            Output
+                            <InputTable rows={this.getData().map(obj => {
+                                x: obj.x
+                                y: obj.approximated
+                            })} />
+                        </div>
+                    </div>
+                    
                     <Chart data={this.getData()} />
                 </div>
             </div>
