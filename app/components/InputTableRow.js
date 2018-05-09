@@ -16,7 +16,6 @@ export default class InputTableRow extends Component<Props> {
         const {
             row
         } = this.props;
-        console.log(row);
         return (
             <tr>
                 <td>{row.x}</td>

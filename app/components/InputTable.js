@@ -14,7 +14,6 @@ export default class InputTable extends Component<Props> {
         const {
             rows
         } = this.props;
-        console.log(rows);
         const tableRows = rows.map((row, index) => <InputTableRow key={index} row={row} />);
         return (
             <table className="table is-bordered is-striped is-narrow is-hoverable">

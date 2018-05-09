@@ -33,12 +33,6 @@ export default class Header extends Component<Props> {
                                         Linear Least Squares
                                     </Link>
                                 </li>
-
-                                <li className={this.getNavStyles("/pls")}>
-                                    <Link to="/pls">
-                                        Polynomial Least Squares
-                                    </Link>
-                                </li>
                             </ul>
                         </div>
                     </nav>
