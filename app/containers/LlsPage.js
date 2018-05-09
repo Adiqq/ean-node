@@ -101,6 +101,81 @@ class LlsPage extends Component<Props> {
             }
         }
     }
+
+    generateSin = (data) => {
+        const {
+            count,
+            min,
+            max
+        } = data;
+        if(this.state.pointType === 'Point'){
+            const factory = new node.PointFactory("sin", "");
+            const points = factory.generatePoints(count, min, max);
+            const lsa = new node.Lsa();
+            for (var i = 0; i < points.length; i++) {
+                lsa.addPoint(points[i]);
+            }
+            const a0 = lsa.calculateA0();
+            const a1 = lsa.calculateA1();
+            const e = lsa.getError();
+            const output = points.sort((a, b) => a.x - b.x).map(value => ({
+                x: value.x,
+                original: value.y,
+                approximated: (value.x * a1 + a0)
+            })) || [];
+            const mapped = output.map(function(value){
+                return {
+                    x: value.x,
+                    y: value.approximated
+                };
+            });
+            this.setState(prevState => ({
+                rows: points,
+                outputRows: mapped,
+                output: output,
+                a0: a0,
+                a1: a1,
+                e: e
+            }))
+        } else {
+            const factory = new node.PointFactory("sin", "interval");
+            const pointsInt = factory.generatePoints(count, min, max);
+            const lsaInt = new node.LsaInterval();
+            for (var i = 0; i < pointsInt.length; i++) {
+                lsaInt.addPoint(pointsInt[i]);
+            }
+            if(pointsInt.length > 1){
+                const a0 = lsaInt.calculateA0();
+                const a1 = lsaInt.calculateA1();
+                const e = lsaInt.getError();
+                const result = lsaInt.getResult();
+                const a0avg = (a0[0] + a0[1]) / 2;
+                const a1avg = (a1[0] + a1[1]) / 2;
+                const output = pointsInt.sort((a, b) => a.x - b.x).map((value, index) => ({
+                    x: value.x,
+                    original: value.y,
+                    approximated: value.x * a1avg + a0avg
+                })) || [];
+                const mapped = output.map(function(value, index){
+                    return {
+                        x: value.x,
+                        y: `[${result[index][0]};${result[index][1]}]`
+                    };
+                });
+                this.setState(prevState => ({
+                    rows: pointsInt,
+                    outputRows: mapped,
+                    output: output,
+                    a0: `[${a0[0]};${a0[1]}], avg: ${(a0[0] + a0[1])/2}`,
+                    a1: `[${a1[0]};${a1[1]}], avg: ${(a1[0] + a1[1])/2}`,
+                    e: `[${e[0]};${e[1]}], avg: ${(e[0] + e[1])/2}`,
+                }))
+            } else{
+                this.setState({rows: []});
+            }
+        }
+    }
+
     reset = () => {
         this.setState(this.initialState);
         this.forceUpdate();
@@ -228,6 +303,7 @@ class LlsPage extends Component<Props> {
                 label="Input method">
                     <option value="Manual">Manual input</option>
                     <option value="Random">Random generation</option>
+                    <option value="Sin">Sin</option>
                 </Field>
                 <Field
                 name="PointType"
@@ -237,7 +313,7 @@ class LlsPage extends Component<Props> {
                     <option value="Point">Point</option>
                     <option value="Interval">Interval</option>
                 </Field>
-                    <InputSelector addRow={this.addRow} generateRandom={this.generateRandom} method={this.state.method} pointType={this.state.pointType} handleSubmit={this.handleSubmit} />
+                    <InputSelector addRow={this.addRow} generateRandom={this.generateRandom} generateSin={this.generateSin} method={this.state.method} pointType={this.state.pointType} handleSubmit={this.handleSubmit} />
                     <div className="field" style={this.margin}>
                         <div className="control">
                             <input

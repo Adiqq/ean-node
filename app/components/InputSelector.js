@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form';
 import InputAdder from './InputAdder';
 import RandomAdder from './RandomAdder';
+import SinAdder from './SinAdder';
 
 type Props = {
     addRow: () => void,
@@ -18,16 +19,18 @@ class InputSelector extends Component<Props> {
             addRow,
             generateRandom,
             method,
-            pointType
+            pointType,
+            generateSin
         } = this.props;
         const components = {
             Manual: InputAdder,
-            Random: RandomAdder
+            Random: RandomAdder,
+            Sin: SinAdder
         }
         console.log(method);
         const Specific = components[method];
         return (
-            <Specific addRow={addRow} generateRandom={generateRandom}  />
+            <Specific addRow={addRow} generateRandom={generateRandom} generateSin={generateSin}  />
         );
     }
 }
