@@ -4,47 +4,59 @@ import { Link } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form';
 import { InputField } from './InputField';
 import { mapErrors, minValue0, number, required } from '../helpers/validation';
+import {ReadOnlyInputField} from "./ReadOnlyInputField";
 
 type Props = {
     addRow: () => void
 };
 
-class InputAdder extends Component<Props> {
+class RandomAdder extends Component<Props> {
     props: Props;
 
-    normalizeNumber = (value) => parseFloat(value);
+    normalizeNumber = (value) => parseInt(value);
+    normalizeFloat = (value) => parseFloat(value);
 
     render() {
         const {
             error,
             handleSubmit,
             submitting,
-            addRow
+            addRow,
+            generateRandom
         } = this.props;
         return (
-            <form onSubmit={handleSubmit(addRow)}>
+            <form onSubmit={handleSubmit(generateRandom)}>
+                <ReadOnlyInputField label="Description" value="Produces random floating-point values i, uniformly distributed on the interval [a, b)" />
                 <Field
-                    name="x"
+                    name="count"
                     component={InputField}
                     type="number"
-                    label="X"
+                    label="Number of elements"
                     normalize={this.normalizeNumber}
                     validate={[required, number, minValue0]}
                 />
                 <Field
-                    name="y"
+                    name="min"
                     component={InputField}
                     type="number"
-                    label="Y"
-                    normalize={this.normalizeNumber}
-                    validate={[required, number, minValue0]}
+                    label="Minimum elements value"
+                    normalize={this.normalizeFloat}
+                    validate={[number,minValue0]}
+                />
+                <Field
+                    name="max"
+                    component={InputField}
+                    type="number"
+                    label="Maximum elements value"
+                    normalize={this.normalizeFloat}
+                    validate={[number,minValue0]}
                 />
                 <div className="field">
                     <div className="control">
                         <input
                             className="button is-link"
                             type="submit"
-                            value="Add"
+                            value="Generate"
                             disabled={submitting}
                         />
                     </div>
@@ -56,4 +68,4 @@ class InputAdder extends Component<Props> {
 
 export default reduxForm({
     form: 'addRowForm'
-})(InputAdder);
+})(RandomAdder);

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import InputTableRow from './InputTableRow'
 
 type Props = {
-    rows: Array<{ x: number, y: number }>
+    rows: Array<{ x: string, y: string }>
 };
 
 export default class InputTable extends Component<Props> {
@@ -14,6 +14,7 @@ export default class InputTable extends Component<Props> {
         const {
             rows
         } = this.props;
+        console.log(rows);
         const tableRows = rows.map((row, index) => <InputTableRow key={index} row={row} />);
         return (
             <table className="table is-bordered is-striped is-narrow is-hoverable">
