@@ -35,9 +35,9 @@ class LlsPage extends Component<Props> {
             const a0 = lsa.calculateA0();
             const a1 = lsa.calculateA1();
             const output = points.sort((a, b) => a.x - b.x).map(value => ({
-                x: value.x.toString(),
-                original: value.y.toString(),
-                approximated: (value.x * a1 + a0).toString()
+                x: value.x,
+                original: value.y,
+                approximated: (value.x * a1 + a0)
             })) || [];
             const mapped = output.map(function(value){
                 return {
@@ -50,8 +50,39 @@ class LlsPage extends Component<Props> {
                 outputRows: mapped,
                 output: output
             }))
+        } else {
+            const factory = new node.PointFactory("RPS", "interval");
+            const pointsInt = factory.generatePoints(count, min, max);
+            const lsaInt = new node.LsaInterval();
+            for (var i = 0; i < pointsInt.length; i++) {
+                lsaInt.addPoint(pointsInt[i]);
+            }
+            if(pointsInt.length > 1){
+                const a0 = lsaInt.calculateA0();
+                const a1 = lsaInt.calculateA1();
+                const result = lsaInt.getResult();
+                const a0avg = (a0[0] + a0[1]) / 2;
+                const a1avg = (a1[0] + a1[1]) / 2;
+                const output = pointsInt.sort((a, b) => a.x - b.x).map((value, index) => ({
+                    x: value.x,
+                    original: value.y,
+                    approximated: value.x * a1avg + a0avg
+                })) || [];
+                const mapped = output.map(function(value, index){
+                    return {
+                        x: value.x,
+                        y: `[${result[index][0]};${result[index][1]}]`
+                    };
+                });
+                this.setState(prevState => ({
+                    rows: pointsInt,
+                    outputRows: mapped,
+                    output: output
+                }))
+            } else{
+                this.setState({rows: []});
+            }
         }
-
     }
 
     addRow = (data) => {
@@ -99,9 +130,9 @@ class LlsPage extends Component<Props> {
             const a0 = lsa.calculateA0();
             const a1 = lsa.calculateA1();
             const output = rows.sort((a, b) => a.x - b.x).map(value => ({
-                x: value.x.toString(),
-                original: value.y.toString(),
-                approximated: (value.x * a1 + a0).toString()
+                x: value.x,
+                original: value.y,
+                approximated: (value.x * a1 + a0)
             })) || [];
             const mapped = output.map(function(value){
                 return {
@@ -120,26 +151,31 @@ class LlsPage extends Component<Props> {
             for (var i = 0; i < pointsInt.length; i++) {
                 lsaInt.addPoint(pointsInt[i]);
             }
-            const a0 = lsaInt.calculateA0();
-            const a1 = lsaInt.calculateA1();
-            const a0avg = (a0[0] + a0[1]) / 2;
-            const a1avg = (a1[0] + a1[1]) / 2;
-            const output = rows.sort((a, b) => a.x - b.x).map(value => ({
-                x: value.x.toString(),
-                original: value.y.toString(),
-                approximated: (value.x * a1avg + a0avg).toString()
-            })) || [];
-            const mapped = output.map(function(value){
-                return {
+            if(pointsInt.length > 1){
+                const a0 = lsaInt.calculateA0();
+                const a1 = lsaInt.calculateA1();
+                const result = lsaInt.getResult();
+                const a0avg = (a0[0] + a0[1]) / 2;
+                const a1avg = (a1[0] + a1[1]) / 2;
+                const output = rows.sort((a, b) => a.x - b.x).map((value, index) => ({
                     x: value.x,
-                    y: value.approximated
-                };
-            });
-            this.setState(prevState => ({
-                rows: rows,
-                outputRows: mapped,
-                output: output
-            }))
+                    original: value.y,
+                    approximated: value.x * a1avg + a0avg
+                })) || [];
+                const mapped = output.map(function(value, index){
+                    return {
+                        x: value.x,
+                        y: `[${result[index][0]};${result[index][1]}]`
+                    };
+                });
+                this.setState(prevState => ({
+                    rows: rows,
+                    outputRows: mapped,
+                    output: output
+                }))
+            } else{
+                this.setState({rows: rows});
+            }
         }
 
 
@@ -161,7 +197,7 @@ class LlsPage extends Component<Props> {
                     <option value="Random">Random generation</option>
                 </Field>
                 <Field
-                name="Method"
+                name="PointType"
                 component={SelectField}
                 onChange={this.onPointTypeSelect}
                 label="Point type">
