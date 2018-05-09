@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import InputTable from '../components/InputTable';
 import InputSelector from '../components/InputSelector';
 import {SelectField} from '../components/SelectField';
+import {ReadOnlyInputField} from '../components/ReadOnlyInputField';
 import Chart from '../components/Chart';
 import { Field, reduxForm } from 'redux-form';
 import node from 'ean-native';
@@ -48,7 +49,9 @@ class LlsPage extends Component<Props> {
             this.setState(prevState => ({
                 rows: points,
                 outputRows: mapped,
-                output: output
+                output: output,
+                a0: a0,
+                a1: a1
             }))
         } else {
             const factory = new node.PointFactory("RPS", "interval");
@@ -77,7 +80,9 @@ class LlsPage extends Component<Props> {
                 this.setState(prevState => ({
                     rows: pointsInt,
                     outputRows: mapped,
-                    output: output
+                    output: output,
+                    a0: `[${a0[0]};${a0[1]}]`,
+                    a1: `[${a1[0]};${a1[1]}]`
                 }))
             } else{
                 this.setState({rows: []});
@@ -143,7 +148,9 @@ class LlsPage extends Component<Props> {
             this.setState(prevState => ({
                 rows: rows,
                 outputRows: mapped,
-                output: output
+                output: output,
+                a0: a0,
+                a1: a1
             }))
         } else {
             let pointsInt = rows.map(value => new node.IntervalPoint(value.x, value.y));
@@ -171,7 +178,9 @@ class LlsPage extends Component<Props> {
                 this.setState(prevState => ({
                     rows: rows,
                     outputRows: mapped,
-                    output: output
+                    output: output,
+                    a0: `[${a0[0]};${a0[1]}]`,
+                    a1: `[${a1[0]};${a1[1]}]`
                 }))
             } else{
                 this.setState({rows: rows});
@@ -205,6 +214,8 @@ class LlsPage extends Component<Props> {
                     <option value="Interval">Interval</option>
                 </Field>
                     <InputSelector addRow={this.addRow} generateRandom={this.generateRandom} method={this.state.method} pointType={this.state.pointType} handleSubmit={this.handleSubmit} />
+                    <ReadOnlyInputField label="A0" value={this.state.a0} />
+                    <ReadOnlyInputField label="A1" value={this.state.a1} />
                     <div className="columns">
                         <div className="column">
                             Input
